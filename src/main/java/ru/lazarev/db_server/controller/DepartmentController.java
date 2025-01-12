@@ -1,31 +1,40 @@
-package ru.lazarev.db_server.service;
+package ru.lazarev.db_server.controller;
 
 import ru.lazarev.db_server.entity.Department;
 import ru.lazarev.db_server.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Service
-public class DepartmentService {
+@RestController
+@RequestMapping("/departments")
+public class DepartmentController {
 
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public Department createDepartment(Department department) {
+    // Создать новый департамент
+    @PostMapping
+    public Department createDepartment(@RequestBody Department department) {
         return departmentRepository.save(department);
     }
 
-    public Department getDepartmentById(Long id) {
+    // Получить департамент по ID
+    @GetMapping("/{id}")
+    public Department getDepartmentById(@PathVariable Long id) {
         return departmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Department not found"));
     }
 
+    // Получить все департаменты
+    @GetMapping
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
 
-    public Department updateDepartment(Long id, Department departmentDetails) {
+    // Обновить департамент
+    @PutMapping("/{id}")
+    public Department updateDepartment(@PathVariable Long id, @RequestBody Department departmentDetails) {
         Department department = departmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Department not found"));
         department.setName(departmentDetails.getName());
         department.setDescription(departmentDetails.getDescription());
@@ -35,7 +44,9 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
-    public void deleteDepartment(Long id) {
+    // Удалить департамент
+    @DeleteMapping("/{id}")
+    public void deleteDepartment(@PathVariable Long id) {
         departmentRepository.deleteById(id);
     }
 }

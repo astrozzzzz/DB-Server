@@ -35,7 +35,4 @@ public class Department {
 
     @Column(name = "ip_address")
     private String ipAddress;
-
-    @Column(name = "meta", columnDefinition = "jsonb")
-    private String meta;
 }
