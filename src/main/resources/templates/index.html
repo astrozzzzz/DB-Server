@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments Database</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Departments</h1>
+<ul>
+    <li th:each="department : ${departments}">
+        <div class="container mt-3">
+            <div class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm rounded">
+                <div>
+                    <span class="text-primary fw-bold">ID: </span>
+                    <span th:text="${department.getDepartmentId()}" class="text-primary fw-bold">ID</span>
+                    <p></p>
+                    <span class="text-primary fw-bold">Name: </span>
+                    <span th:text="${department.getName()}" class="text-primary fw-bold">Name</span>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm delete-department"
+                            th:data-id="${department.getDepartmentId()}">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+
+                    <button class="btn btn-primary btn-sm edit-department"
+                            th:data-id="${department.getDepartmentId()}">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center">
+        <a href="/add-department" class="btn btn-success btn-lg">
+            <i class="bi bi-plus-circle"></i> Add Department
+        </a>
+    </div>
+</div>
+
+
+<h1>Employees</h1>
+<ul>
+    <li th:each="employee : ${employees}">
+        <div class="container mt-3">
+            <div class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm rounded">
+                <div>
+                    <span class="text-primary fw-bold">ID: </span>
+                    <span th:text="${employee.getEmployeeId()}" class="text-primary fw-bold">ID</span>
+                    <p></p>
+                    <span class="text-primary fw-bold">Name: </span>
+                    <span th:text="${employee.getFirstName()}" class="text-primary fw-bold">Name</span>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm delete-employee"
+                            th:data-id="${employee.getEmployeeId()}">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+
+                    <button class="btn btn-primary btn-sm edit-employee"
+                            th:data-id="${employee.getEmployeeId()}">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center">
+        <a href="/add-employee" class="btn btn-success btn-lg">
+            <i class="bi bi-plus-circle"></i> Add Employee
+        </a>
+    </div>
+</div>
+
+<h1>Projects</h1>
+<ul>
+    <li th:each="project : ${projects}">
+        <div class="container mt-3">
+            <div class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm rounded">
+                <div>
+                    <span class="text-primary fw-bold">ID: </span>
+                    <span th:text="${project.getProjectId()}" class="text-primary fw-bold">ID</span>
+                    <p></p>
+                    <span class="text-primary fw-bold">Name: </span>
+                    <span th:text="${project.getProjectName()}" class="text-primary fw-bold">Name</span>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm delete-project"
+                            th:data-id="${project.getProjectId()}">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+
+                    <button class="btn btn-primary btn-sm edit-project"
+                            th:data-id="${project.getProjectId()}">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center">
+        <a href="/add-project" class="btn btn-success btn-lg">
+            <i class="bi bi-plus-circle"></i> Add Project
+        </a>
+    </div>
+</div>
+
+<h1>Employees and projects</h1>
+<ul>
+    <li th:each="employee_project : ${employeeProjectPairs}">
+        <div class="container mt-3">
+            <div class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm rounded">
+                <div>
+                    <span class="text-primary fw-bold">Project name: </span>
+                    <span th:text="${employee_project.getProject().getProjectName()}" class="text-primary fw-bold">ID</span>
+                    <p></p>
+                    <span class="text-primary fw-bold">Name: </span>
+                    <span th:text="${employee_project.getEmployee().getFirstName()}" class="text-primary fw-bold">Name</span>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm delete-employee-project"
+                            th:data-id="|${employee_project.getId().getEmployeeId()}_${employee_project.getId().getProjectId()}|">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+
+                    <button class="btn btn-primary btn-sm edit-employee-project"
+                            th:data-id="|${employee_project.getId().getEmployeeId()}_${employee_project.getId().getProjectId()}|">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center">
+        <a href="/add-employee-project" class="btn btn-success btn-lg">
+            <i class="bi bi-plus-circle"></i> Add employee to project
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    // Обработчик клика для кнопок "Delete" у департаментов
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteDepartmentButtons = document.querySelectorAll('.delete-department');
+        deleteDepartmentButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const departmentId = this.getAttribute('data-id'); // Получаем ID департамента
+                if (confirm(`Are you sure you want to delete department with ID ${departmentId}?`)) {
+                    fetch(`http://localhost:8080/departments/${departmentId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Failed to delete department with ID ${departmentId}`);
+                            }
+                            alert('Department deleted successfully!');
+                            location.reload(); // Перезагрузка страницы
+                        })
+                        .catch(error => {
+                            alert(`Error: ${error.message}`);
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        });
+
+        // Обработчик клика для кнопок "Delete" у сотрудников
+        const deleteEmployeeButtons = document.querySelectorAll('.delete-employee');
+        deleteEmployeeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const employeeId = this.getAttribute('data-id'); // Получаем ID сотрудника
+                if (confirm(`Are you sure you want to delete employee with ID ${employeeId}?`)) {
+                    fetch(`http://localhost:8080/employees/${employeeId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Failed to delete employee with ID ${employeeId}`);
+                            }
+                            alert('Employee deleted successfully!');
+                            location.reload(); // Перезагрузка страницы
+                        })
+                        .catch(error => {
+                            alert(`Error: ${error.message}`);
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        });
+        const deleteProjectButtons = document.querySelectorAll('.delete-project');
+        deleteProjectButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const projectId = this.getAttribute('data-id'); // Получаем ID проекта
+                if (confirm(`Are you sure you want to delete project with ID ${projectId}?`)) {
+                    fetch(`http://localhost:8080/projects/${projectId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Failed to delete project with ID ${projectId}`);
+                            }
+                            alert('Project deleted successfully!');
+                            location.reload(); // Перезагрузка страницы
+                        })
+                        .catch(error => {
+                            alert(`Error: ${error.message}`);
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        });
+
+        const deleteEmployeeProjectButtons = document.querySelectorAll('.delete-employee-project');
+        deleteEmployeeProjectButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const employeeProjectId = this.getAttribute('data-id'); // Получаем ID проекта
+                if (confirm(`Are you sure you want to delete employee on project with ID ${employeeProjectId.split("_")[1]}?`)) {
+                    fetch(`http://localhost:8080/employee-projects?employeeId=${employeeProjectId.split("_")[0]}&projectId=${employeeProjectId.split("_")[1]}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Failed to delete employee on project with ID ${employeeProjectId.split("_")[1]}`);
+                            }
+                            alert('Employee deleted successfully!');
+                            location.reload(); // Перезагрузка страницы
+                        })
+                        .catch(error => {
+                            alert(`Error: ${error.message}`);
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработчик кнопок "Edit" для департаментов
+        const editButtons = document.querySelectorAll('.edit-department');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const departmentId = this.getAttribute('data-id'); // Получаем ID департамента
+                // Перенаправление на страницу редактирования департамента
+                window.location.href = `/edit-department/${departmentId}`;
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработчик кнопок "Edit" для employee
+        const editButtons = document.querySelectorAll('.edit-employee');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const employeeId = this.getAttribute('data-id'); // Получаем ID работника
+                // Перенаправление на страницу редактирования департамента
+                window.location.href = `/edit-employee/${employeeId}`;
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработчик кнопок "Edit" для project
+        const editButtons = document.querySelectorAll('.edit-project');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const projectId = this.getAttribute('data-id'); // Получаем ID проекта
+                // Перенаправление на страницу редактирования департамента
+                window.location.href = `/edit-project/${projectId}`;
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработчик кнопок "Edit" для employee project
+        const editButtons = document.querySelectorAll('.edit-employee-project');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const employeeProjectId = this.getAttribute('data-id'); // Получаем ID проекта
+                // Перенаправление на страницу редактирования департамента
+                window.location.href = `/edit-employee-project/${employeeProjectId.split("_")['1']}/${employeeProjectId.split("_")['0']}`;
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

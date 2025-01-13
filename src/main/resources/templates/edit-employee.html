@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Edit Employee</h1>
+    <form id="edit-employee-form">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" class="form-control mb-3" placeholder="Enter first name" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" class="form-control mb-3" placeholder="Enter last name" required>
+
+        <label for="birthDate">Birth Date:</label>
+        <input type="date" id="birthDate" name="birthDate" class="form-control mb-3" required>
+
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" name="startTime" class="form-control mb-3" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control mb-3" placeholder="Enter email" required>
+
+        <label for="notes">Notes:</label>
+        <textarea id="notes" name="notes" class="form-control mb-3" placeholder="Enter notes (optional)" rows="4"></textarea>
+
+        <label for="department">Department:</label>
+        <select id="department" name="department" class="form-control mb-3">
+            <!-- Options will be added dynamically via JavaScript -->
+        </select>
+
+        <button type="submit" class="btn btn-primary">Update Employee</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Получаем ID сотрудника из URL
+        const pathname = window.location.pathname; // Получаем путь из URL
+        const employeeId = pathname.split('/').pop(); // Берём последний сегмент пути (ID)
+
+        // Загружаем данные сотрудника для заполнения формы
+        fetch(`http://localhost:8080/employees/${employeeId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employee data');
+                }
+                return response.json();
+            })
+            .then(employee => {
+                // Заполняем поля формы данными сотрудника
+                document.getElementById('firstName').value = employee.firstName;
+                document.getElementById('lastName').value = employee.lastName;
+                document.getElementById('birthDate').value = employee.birthDate;
+                document.getElementById('startTime').value = employee.startTime;
+                document.getElementById('email').value = employee.email;
+                document.getElementById('notes').value = employee.notes;
+
+                // Устанавливаем выбранный департамент
+                const departmentSelect = document.getElementById('department');
+                fetch('/departments') // Загружаем все департаменты
+                    .then(response => response.json())
+                    .then(departments => {
+                        departments.forEach(department => {
+                            const option = document.createElement('option');
+                            option.value = department.departmentId;
+                            option.textContent = department.name;
+                            if (department.departmentId === employee.department.departmentId) {
+                                option.selected = true; // Устанавливаем выбранный департамент
+                            }
+                            departmentSelect.appendChild(option);
+                        });
+                    });
+            })
+            .catch(error => {
+                alert('Error loading employee data: ' + error.message);
+                console.error('Error:', error);
+            });
+
+        // Обработчик отправки формы
+        document.getElementById('edit-employee-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Отключает стандартное поведение отправки формы
+
+            // Собираем данные из формы
+            const data = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                birthDate: document.getElementById('birthDate').value,
+                startTime: document.getElementById('startTime').value,
+                email: document.getElementById('email').value,
+                notes: document.getElementById('notes').value,
+                department: {
+                    departmentId: parseInt(document.getElementById('department').value)
+                }
+            };
+
+            // Отправляем PUT-запрос
+            fetch(`http://localhost:8080/employees/${employeeId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update employee');
+                    }
+                    alert('Employee updated successfully!');
+                    // Перенаправляем на другую страницу (например, список сотрудников)
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    alert('Error updating employee: ' + error.message);
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>
+</body>
+</html>

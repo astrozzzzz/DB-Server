@@ -48,6 +48,33 @@ public class EmployeeProjectController {
         return employeeProjectRepository.save(employeeProject);
     }
 
+    @PutMapping
+    public EmployeeProject updateEmployeeProject(@RequestBody Map<String, Object> requestBody) {
+        UUID oldEmployeeId = UUID.fromString(requestBody.get("oldEmployeeId").toString());
+        Long oldProjectId = Long.parseLong(requestBody.get("oldProjectId").toString());
+        UUID newEmployeeId = UUID.fromString(requestBody.get("newEmployeeId").toString());
+        Long newProjectId = Long.parseLong(requestBody.get("newProjectId").toString());
+
+        // Удаляем старую связь
+        EmployeeProject existingEmployeeProject = employeeProjectRepository.findByEmployeeIdAndProjectId(oldEmployeeId, oldProjectId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+        employeeProjectRepository.delete(existingEmployeeProject);
+
+        // Создаём новую связь
+        Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(() -> new RuntimeException("New employee not found"));
+        Project newProject = projectRepository.findById(newProjectId).orElseThrow(() -> new RuntimeException("New project not found"));
+
+        EmployeeProjectId newEmployeeProjectId = new EmployeeProjectId();
+        newEmployeeProjectId.setEmployeeId(newEmployeeId);
+        newEmployeeProjectId.setProjectId(newProjectId);
+
+        EmployeeProject newEmployeeProject = new EmployeeProject();
+        newEmployeeProject.setId(newEmployeeProjectId);
+        newEmployeeProject.setEmployee(newEmployee);
+        newEmployeeProject.setProject(newProject);
+
+        return employeeProjectRepository.save(newEmployeeProject);
+    }
 
 
     // Удалить сотрудника из проекта
